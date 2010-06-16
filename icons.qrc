@@ -1,0 +1,17 @@
+<RCC>
+    <qresource prefix="/">
+        <file>images/arc.png</file>
+        <file>images/bg.png</file>
+        <file>images/export.png</file>
+        <file>images/label3.png</file>
+        <file>images/new.png</file>
+        <file>images/node.png</file>
+        <file>images/open.png</file>
+        <file>images/redo.png</file>
+        <file>images/save.png</file>
+        <file>images/settings.png</file>
+        <file>images/undo.png</file>
+        <file>images/zoomin.png</file>
+        <file>images/zoomout.png</file>
+    </qresource>
+</RCC>
