@@ -9,20 +9,26 @@ class Canvas: public QObject
 Q_OBJECT
 public:
     Canvas(QGraphicsScene *scene);
-    void drawCircle(QPoint center, QPoint radius);
+    ~Canvas();
 
-    void setChanges(uint w, uint h, QColor bg, QColor nC, bool wA);
-    void getParametres(uint &w, uint &h, QColor &bg, QColor &nC, bool &wA);
+    void drawCircle(QPoint center, QPoint radius);
+    void setChanges(QSize d, QColor bg, QColor nC, bool wA);
+    void getParametres(QSize &d, QColor &bg, QColor &nC, bool &wA);
+    void update();
+
 public slots:
     void zoomIn();
     void zoomOut();
+
 private:
     QGraphicsScene *scene;
     QGraphicsRectItem *canvas;
+    QSize dim;
     uint width;
     uint height;
     QColor background;
     QColor nodeColor;
+    qreal factor;
     bool wArc;
 };
 

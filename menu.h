@@ -23,6 +23,7 @@ private slots:
 //    void saveDoc();
 //    void openDoc();
     void newDoc();
+    void closeCanv();
     void proAction();
 //    void ExportGif();
 private:
@@ -42,6 +43,7 @@ private:
     QAction *OpenAction;
     QAction *SaveAction;
     QAction *ExportAction;
+    QAction *CloseAction;
 
     QAction *UndoAction;
     QAction *RedoAction;

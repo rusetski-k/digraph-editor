@@ -2,23 +2,32 @@
 #define SETTINGSDIALOG_H
 
 #include <QDialog>
+#include "ui_settingsdialog.h"
+class Canvas;
 
-namespace Ui {
-    class SettingsDialog;
-}
-
-class SettingsDialog : public QDialog {
+class SettingsDialog : public QDialog, private Ui::SettingsDialog {
     Q_OBJECT
 public:
-    SettingsDialog(QWidget *parent = 0);
+    SettingsDialog(Canvas *canvas, QWidget *parent);
     ~SettingsDialog();
     void Show();
 
 protected:
     void changeEvent(QEvent *e);
+    Canvas *canvas;
 
 private:
-    Ui::SettingsDialog *ui;
+    void chooseColor(QLabel *label, QColor *color);
+    void updateColorLabel(QLabel *label, const QColor &color);
+
+    QColor C_Color;
+    QColor N_Color;
+
+private slots:
+    void on_buttonBox_rejected();
+    void on_buttonBox_accepted();
+    void on_nodeColor_clicked();
+    void on_BgColor_clicked();
 };
 
 #endif // SETTINGSDIALOG_H
