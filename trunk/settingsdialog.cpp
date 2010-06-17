@@ -1,25 +1,31 @@
 #include "settingsdialog.h"
-#include "ui_settingsdialog.h"
+#include "canvas.h"
+#include <QtGui>
 
-SettingsDialog::SettingsDialog(QWidget *parent) :
-    QDialog(parent),
-    ui(new Ui::SettingsDialog)
+SettingsDialog::SettingsDialog(Canvas *c, QWidget *parent) :
+    QDialog(parent)
 {
+    setupUi(this);
+    canvas = c;
+    QSize d;
+    bool wA;
+    canvas->getParametres(d, C_Color, N_Color, wA);
 
-    ui->setupUi(this);
-//    this->setWindowIcon(QIcon(":/images/settings.png"));
-//    this->setWindowTitle("Canvas settings");
+    updateColorLabel(label_3,C_Color);
+    updateColorLabel(label,N_Color);
+    wArc->setChecked(wA);
+    hCanvas->setText(QString::number(d.height()));
+    wCanvas->setText(QString::number(d.width()));
 
-//
-//    textColorButton = new QPushButton(groupBox_2);
-//    textColorButton->setObjectName(QString::fromUtf8("textColorButton"));
-//
-//    gridLayout->addWidget(textColorButton, 1, 2, 1, 1);
+    // Запрет на ввод левых значений в размер канваса
+    QRegExp rx("[1-9]\\d{0,3}");
+    hCanvas->setValidator(new QRegExpValidator(rx,0));
+    wCanvas->setValidator(new QRegExpValidator(rx,0));
 }
 
 SettingsDialog::~SettingsDialog()
 {
-    delete ui;
+    this->~QDialog();
 }
 
 void SettingsDialog::Show()
@@ -33,9 +39,47 @@ void SettingsDialog::changeEvent(QEvent *e)
     QDialog::changeEvent(e);
     switch (e->type()) {
     case QEvent::LanguageChange:
-        ui->retranslateUi(this);
+        retranslateUi(this);
         break;
     default:
         break;
     }
+}
+
+void SettingsDialog::updateColorLabel(QLabel *label, const QColor &color)
+{
+    QPixmap pixmap(90, 18);
+    pixmap.fill(color);
+    label->setPixmap(pixmap);
+}
+
+void SettingsDialog::chooseColor(QLabel *label, QColor *color)
+{
+    QColor newColor = QColorDialog::getColor(*color, this);
+    if (newColor.isValid()) {
+        *color = newColor;
+        updateColorLabel(label, *color);
+    }
+}
+
+void SettingsDialog::on_BgColor_clicked()
+{
+    chooseColor(label_3, &C_Color);
+}
+
+void SettingsDialog::on_nodeColor_clicked()
+{
+    chooseColor(label, &N_Color);
+}
+
+void SettingsDialog::on_buttonBox_accepted()
+{
+    canvas->setChanges(QSize(hCanvas->text().toUInt(), wCanvas->text().toUInt()),
+                       C_Color,N_Color,wArc);
+    this->accept();
+}
+
+void SettingsDialog::on_buttonBox_rejected()
+{
+    this->reject();
 }
